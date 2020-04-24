@@ -18,12 +18,12 @@ LDFLAGS		:=
 ################ Do not change anything on downwards! ################
 SRCS		:= $(shell find $(SRC_DIR) -name *.cpp)
 OBJS		:= $(addprefix $(OBJ_DIR)/, $(notdir $(SRCS:.cpp=.o)))
-DEPS		:= $(addprefix $(BUILD_DIR), $(notdir $(OBJS:.o=.d)))
+DEPS		:= $(addprefix $(BUILD_DIR)/, $(notdir $(OBJS:.o=.d)))
 
 ######################################################################
 ########################## Rules begin here ##########################
 ######################################################################
-.PHONY: all clean debug release build
+.PHONY: all build clean debug release
 
 all: build $(DEPS) $(TARGET_DIR)/$(TARGET)
 
@@ -42,10 +42,11 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 $(TARGET_DIR)/$(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 	@ln -sf $(TARGET_DIR)/$(TARGET) exe
-	@echo -e "COMPILATION COMPLETED SUCCESFULLY!"
-	@echo -e "Run the executable by typing: ./exe"
+	@echo "\e[92mCOMPILATION COMPLETED SUCCESFULLY!"
+	@echo "Run the executable by typing:\e[0m ./exe"
 
 build:
+	@mkdir -p $(BUILD_DIR)
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(TARGET_DIR)
 
